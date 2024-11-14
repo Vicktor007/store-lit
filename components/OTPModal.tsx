@@ -32,6 +32,7 @@ const OtpModal = ({
   const [isOpen, setIsOpen] = useState(true);
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [otpLoading, setOtpLoading] = useState(false);
 
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -42,8 +43,6 @@ const OtpModal = ({
     try {
       const sessionId = await verifySecret({ accountId, password });
 
-      console.log({ sessionId });
-
       if (sessionId) router.push("/");
     } catch (error) {
       console.log("Failed to verify OTP", error);
@@ -53,7 +52,14 @@ const OtpModal = ({
   };
 
   const handleResendOtp = async () => {
-    await sendEmailOTP({ email });
+    try {
+      setOtpLoading(true);
+      await sendEmailOTP({ email });
+    } catch (error) {
+      console.log("Failed to send OTP", error);
+    } finally {
+      setOtpLoading(false);
+    }
   };
 
   return (
@@ -115,7 +121,7 @@ const OtpModal = ({
                 className="pl-1 text-brand"
                 onClick={handleResendOtp}
               >
-                Click to resend
+                {otpLoading ? "Sending..." : "Click to resend"}
               </Button>
             </div>
           </div>
