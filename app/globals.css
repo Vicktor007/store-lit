@@ -194,6 +194,8 @@
   .nav-icon {
     @apply w-6 filter invert opacity-25 !important;
   }
+
+
   .nav-icon-active {
     @apply invert-0 opacity-100 !important;
   }
@@ -321,6 +323,26 @@
   .chart {
     @apply flex items-center rounded-[20px] bg-brand p-5 text-white md:flex-col xl:flex-row !important;
   }
+
+  /* styles.css */
+
+  .floating-file-uploader{
+    display: none;
+  }
+/* styles.css */
+@media (max-width: 991px) {
+  .floating-file-uploader {
+    position: fixed;
+    display: block;
+    bottom: 40px;
+    right: 40px;
+    z-index: 1000; /* Ensure it appears above other elements */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optional: Add a shadow for better visibility */
+    border-radius: 50%; /* Optional: Add rounded corners */
+  }
+}
+
+
   .chart-container {
     @apply mx-auto aspect-square w-[180px] text-white xl:w-[250px] !important;
   }
@@ -343,6 +365,10 @@
   /* FileUploader */
   .uploader-button {
     @apply primary-btn h-[52px] gap-2 px-10 shadow-drop-1 !important;
+  }
+
+  .plus-uploader-button {
+    @apply primary-btn h-[52px] shadow-drop-1 !important;
   }
   .uploader-preview-list {
     @apply fixed bottom-10 right-10 z-50 flex size-full h-fit max-w-[480px] flex-col gap-3 rounded-[20px] bg-white p-7 shadow-drop-3 !important;
@@ -422,7 +448,11 @@
     @apply h5 mt-9 flex-1 gap-1 text-brand !important;
   }
   .sidebar-nav-item {
-    @apply flex text-light-100 gap-4 rounded-xl lg:w-full justify-center lg:justify-start items-center h5 lg:px-[30px] h-[52px] lg:rounded-full !important;
+    @apply flex text-light-100 hover:bg-rose-300 hover:text-white gap-4 rounded-xl lg:w-full justify-center lg:justify-start items-center h5 lg:px-[30px] h-[52px] lg:rounded-full !important;
+  }
+
+  .sidebar-nav-item:hover > .nav-icon {
+    @apply  invert-0 opacity-100 !important;
   }
   .sidebar-user-info {
     @apply mt-4 flex items-center justify-center gap-2 rounded-full bg-brand/10 p-1 text-light-100 lg:justify-start lg:p-3 !important;

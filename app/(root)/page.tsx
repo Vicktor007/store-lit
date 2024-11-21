@@ -26,7 +26,7 @@ const Dashboard = async () => {
         <Chart used={totalSpace.used} />
 
         {/* Uploaded file type summaries */}
-        <ul className="dashboard-summary-list">
+        <div className="dashboard-summary-list">
           {usageSummary.map((summary) => (
             <Link
               href={summary.url}
@@ -56,7 +56,7 @@ const Dashboard = async () => {
               </div>
             </Link>
           ))}
-        </ul>
+        </div>
       </section>
 
       {/* Recent files uploaded */}

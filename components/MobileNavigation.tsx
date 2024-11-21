@@ -145,6 +145,7 @@ import { Button } from "@/components/ui/button";
 import FileUploader from "@/components/FileUploader";
 import { signOutUser } from "@/lib/actions/user.actions";
 
+
 interface Props {
   $id: string;
   accountId: string;
@@ -169,13 +170,16 @@ const MobileNavigation = ({
 
   return (
     <header className="mobile-header">
+      <Link href="/">
       <Image
-        src="/assets/icons/logo-full-brand.svg"
+        src="/assets/icons/logo1.svg"
         alt="logo"
         width={120}
         height={52}
-        className="h-auto"
+        className="mt-3 h-auto"
       />
+      </Link>
+      
 
       <Sheet open={open} onOpenChange={setOpen}>
         <SheetTrigger>
@@ -186,7 +190,7 @@ const MobileNavigation = ({
             height={30}
           />
         </SheetTrigger>
-        <SheetContent className="shad-sheet h-screen px-3">
+        <SheetContent className="shad-sheet z-[99999] h-screen px-3">
           <SheetTitle>
             <div className="header-user">
               <Image

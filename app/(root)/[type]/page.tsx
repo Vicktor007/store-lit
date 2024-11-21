@@ -4,6 +4,8 @@ import { getFiles } from "@/lib/actions/file.actions";
 import { Models } from "node-appwrite";
 import Card from "@/components/Card";
 import { getFileTypesParams, convertFileSize } from "@/lib/utils";
+import { getCurrentUser } from "@/lib/actions/user.actions";
+import PlusUploader from "@/components/PlusUploader";
 
 const calculateTotalSize = (files: Models.Document[]) => {
   const totalSize = files.reduce((acc, file) => acc + file.size, 0);
@@ -17,12 +19,15 @@ const Page = async ({ searchParams, params }: SearchParamProps) => {
 
   const types = getFileTypesParams(type) as FileType[];
 
+  const currentUser = await getCurrentUser();
+
   const files = await getFiles({ types, searchText, sort });
 
   const totalSize = calculateTotalSize(files.documents);
 
   return (
     <div className="page-container">
+      
       <section className="w-full">
         <h1 className="h1 capitalize">{type}</h1>
 
@@ -47,8 +52,12 @@ const Page = async ({ searchParams, params }: SearchParamProps) => {
           ))}
         </section>
       ) : (
+        <>
         <p className="empty-list">No files uploaded</p>
+        <PlusUploader ownerId={currentUser.$id} accountId={currentUser.accountId} />
+        </>
       )}
+      {files.total > 0 && <div className="floating-file-uploader"><PlusUploader ownerId={currentUser.$id} accountId={currentUser.accountId} /></div>}
     </div>
   );
 };
