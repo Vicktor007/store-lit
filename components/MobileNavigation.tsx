@@ -169,10 +169,10 @@ const MobileNavigation = ({
   };
 
   return (
-    <header className="mobile-header">
+    <header className="mobile-header sticky">
       <Link href="/">
       <Image
-        src="/assets/icons/logo1.svg"
+        src="/assets/icons/logo-full-brand.svg"
         alt="logo"
         width={120}
         height={52}
