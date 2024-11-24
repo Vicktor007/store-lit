@@ -203,7 +203,7 @@ const ActionDropdown = ({ file }: { file: Models.Document }) => {
             height={34}
           />
         </DropdownMenuTrigger>
-        <DropdownMenuContent>
+        <DropdownMenuContent className="z-[99999]">
           <DropdownMenuLabel className="max-w-[200px] truncate">
             {file.name}
           </DropdownMenuLabel>

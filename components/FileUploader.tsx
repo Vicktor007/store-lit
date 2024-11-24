@@ -107,7 +107,7 @@ const FileUploader = ({ ownerId, accountId, className }: Props) => {
             return (
               <li
                 key={`${file.name}-${index}`}
-                className="uploader-preview-item"
+                className="uploader-preview-item relative"
               >
                 <div className="flex items-center gap-3">
                   <Thumbnail
@@ -118,22 +118,16 @@ const FileUploader = ({ ownerId, accountId, className }: Props) => {
 
                   <div className="preview-item-name">
                     {file.name}
-                    {uploadStatus[file.name] ? (
-                      <Image
-                        src="/assets/icons/verified-tag-2.gif"
-                        width={80}
-                        height={12}
-                        alt="Loader"
-                        style={{ width: "20px", height: "20px" }}
-                      />
-                    ) : (
-                      <Image
-                        src="/assets/icons/file-loader.gif"
-                        width={80}
-                        height={20}
-                        alt="Loader"
-                      />
-                    )}
+
+                    <Image
+                      src={!uploadStatus[file.name] ? "/assets/icons/file-loader.gif" : "/assets/icons/verified-tag-2.gif"}
+                      width={80}
+                      height={12}
+                      alt="Loader"
+                      style={uploadStatus[file.name] ? { width: "20px", height: "20px" }:{}}
+                    />
+
+            
                   </div>
                 </div>
 
@@ -143,6 +137,7 @@ const FileUploader = ({ ownerId, accountId, className }: Props) => {
                   height={24}
                   alt="Remove"
                   onClick={(e) => handleRemoveFile(e, file.name)}
+                  className="absolute right-4"
                 />
               </li>
             );
@@ -154,3 +149,11 @@ const FileUploader = ({ ownerId, accountId, className }: Props) => {
 };
 
 export default FileUploader;
+
+/* <Image
+                        src={!uploadStatus[file.name] ?("/assets/icons/file-loader.gif"):("/assets/icons/verified-tag-2.gif") }
+                        width={80}
+                        height={12}
+                        alt="Loader"
+                        style={{ width: "20px", height: "20px" }}
+                      /> */
