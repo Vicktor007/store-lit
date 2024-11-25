@@ -123,11 +123,17 @@
     @apply text-[14px] leading-[20px] font-medium;
   }
   .caption {
-    @apply text-[12px] leading-[16px] font-normal;
+    @apply text-[11px] leading-[16px] font-normal;
   }
   .overline {
     @apply text-[10px] leading-[14px] font-normal;
   }
+
+  .selected-avatar {
+    border: 2px solid red;
+    border-radius: 50%; 
+  }
+  
 
   /* ===== HELPER CLASSES */
   .container {

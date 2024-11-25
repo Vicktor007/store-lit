@@ -15,9 +15,10 @@ interface Props {
   ownerId: string;
   accountId: string;
   className?: string;
+  onClose: () => void;
 }
 
-const AvatarUploader = ({ ownerId, accountId, className }: Props) => {
+const AvatarUploader = ({ ownerId, accountId, className, onClose }: Props) => {
   const path = usePathname();
   const { toast } = useToast();
   const [files, setFiles] = useState<File[]>([]);
@@ -60,14 +61,16 @@ const AvatarUploader = ({ ownerId, accountId, className }: Props) => {
                   prevFiles.filter((f) => f.name !== file.name),
                 );
               }, 5000);
+              onClose();
             }
           },
+         
         );
       });
 
       await Promise.all(uploadPromises);
     },
-    [ownerId, accountId, path, toast],
+    [ownerId, accountId, path, toast,onClose],
   );
 
   const { getRootProps, getInputProps } = useDropzone({ onDrop });
@@ -89,13 +92,14 @@ const AvatarUploader = ({ ownerId, accountId, className }: Props) => {
     <div {...getRootProps()} className="cursor-pointer">
       <input {...getInputProps()} />
       <Button type="button" className={cn("uploader-button", className)}>
-        <Image
+      <Image
           src="/assets/icons/upload.svg"
           alt="upload"
           width={24}
           height={24}
-        />{" "}
-        <p>Change avatar</p>
+        />
+        {" "}
+        <p>Choose custom image</p>
       </Button>
       {files.length > 0 && (
         <ul className="uploader-preview-list">

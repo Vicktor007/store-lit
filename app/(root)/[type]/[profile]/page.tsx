@@ -1,20 +1,33 @@
-import AvatarUploader from '@/components/AvatarUploader';
-// import { Button } from '@/components/ui/button';
+
+"use client"; 
+
+import AvatarModal from '@/components/AvatarModal';
+import { Button } from '@/components/ui/button';
 import { getCurrentUser } from '@/lib/actions/user.actions';
-// import { cn } from '@/lib/utils';
+import { cn } from '@/lib/utils';
 import Image from 'next/image';
-import React from 'react'
+import React, { useState, useEffect } from 'react';
+
+type User = { $id: string; avatar: string; fullName: string; email: string; accountId: string; };
+
+const Page = () => {
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
+  const [open, setOpen] = useState(false);
+
+  const fetchUser = async () => { const user = await getCurrentUser(); setCurrentUser(user); }; 
 
 
+  useEffect(() => { fetchUser(); }, []); 
+  
+  const handleClose = () => { setOpen(false); fetchUser();  };
 
-const page = async () => {
-
-    const currentUser = await getCurrentUser();
+  if (!currentUser) {
+    return <div className='empty-list'>Loading...</div>; 
+  }
 
   return (
     <div>
-        
-        <div className="profile-user-info">
+      <div className="profile-user-info">
         <Image
           src={currentUser.avatar}
           alt="Avatar"
@@ -26,12 +39,15 @@ const page = async () => {
           <p className="subtitle-2 capitalize">{currentUser.fullName}</p>
           <p className="caption">{currentUser.email}</p>
         </div>
-        <AvatarUploader ownerId={currentUser.$id} accountId={currentUser.accountId}/>
+        
+
+        <Button type="button" className={cn("uploader-button")} onClick={() => setOpen(true)}>
+          <p>Change avatar</p>
+        </Button>
       </div>
-
-      
+      {open && <AvatarModal isOpen={open} accountId={currentUser.accountId} onClose={handleClose} ownerId={currentUser.$id} />}
     </div>
-  )
-}
+  );
+};
 
-export default page
+export default Page;

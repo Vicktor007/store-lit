@@ -62,6 +62,27 @@ export const sendEmailOTP = async ({ email }: { email: string }) => {
 };
 
 
+export const updateAvatar = async ({ownerId, avatarPlaceholder}
+  :
+  {ownerId: string; avatarPlaceholder: string}) => {
+    const { databases } = await createAdminClient();
+
+    try {
+      
+    const updatedAvatar=   await databases.updateDocument(
+        appwriteConfig.databaseId,
+        appwriteConfig.usersCollectionId,
+        ownerId,
+        {
+          avatar: avatarPlaceholder,
+        }
+      );
+      return parseStringify(updatedAvatar)
+    } catch (error) {
+      handleError(error, "failed to update avatar")
+    }
+  }
+
 
 export const updateUser = async ({
   file,
