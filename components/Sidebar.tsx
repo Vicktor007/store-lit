@@ -70,7 +70,7 @@ const Sidebar = ({ fullName, avatar, email }: Props) => {
         className="w-full"
       />
 
-      <div className="sidebar-user-info">
+      <Link href="/type/profile" className="sidebar-user-info">
         <Image
           src={avatar}
           alt="Avatar"
@@ -82,7 +82,7 @@ const Sidebar = ({ fullName, avatar, email }: Props) => {
           <p className="subtitle-2 capitalize">{fullName}</p>
           <p className="caption">{email}</p>
         </div>
-      </div>
+      </Link>
     </aside>
   );
 };

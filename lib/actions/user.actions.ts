@@ -3,21 +3,18 @@
 import { createAdminClient, createSessionClient } from "@/lib/appwrite";
 import { appwriteConfig } from "@/lib/appwrite/config";
 import { Query, ID } from "node-appwrite";
-import { parseStringify } from "@/lib/utils";
+import { constructFileUrl, getFileType, parseStringify } from "@/lib/utils";
 import { cookies } from "next/headers";
 import { avatarPlaceholderUrl } from "@/constants";
 import { redirect } from "next/navigation";
+// import { uploadFile } from "./file.actions";
+import { revalidatePath } from "next/cache";
+import { InputFile } from "node-appwrite/file";
 
-// const client = new Client();
-// const account = new Account(client);
-//
-// client
-//   .setEndpoint(appwriteConfig.endpointUrl)
-//   .setProject(appwriteConfig.projectId)
-//   .setKey(appwriteConfig.secretKey);
+
 
 type AppwriteErrorResponse = {
-  [key: string]: any; // Replace `any` with a more specific type if possible
+  [key: string]: any; 
 };
 
 type AppwriteError = {
@@ -64,6 +61,81 @@ export const sendEmailOTP = async ({ email }: { email: string }) => {
   }
 };
 
+
+
+export const updateUser = async ({
+  file,
+  ownerId,
+  accountId,
+  path
+}: UpdateUserProps) => {
+  const { storage, databases } = await createAdminClient();
+
+  try {
+    // Convert file to InputFile
+    const inputFile = InputFile.fromBuffer(file, file.name);
+
+    // Upload file to storage
+    const bucketFile = await storage.createFile(
+      appwriteConfig.bucketId,
+      ID.unique(),
+      inputFile
+    );
+
+    // Construct file document
+    const fileDocument = {
+      type: getFileType(bucketFile.name).type,
+      name: bucketFile.name,
+      url: constructFileUrl(bucketFile.$id),
+      extension: getFileType(bucketFile.name).extension,
+      size: bucketFile.sizeOriginal,
+      owner: ownerId,
+      accountId,
+      users: [],
+      bucketFileId: bucketFile.$id,
+    };
+
+    // Create file document in database
+    let newFile;
+    try {
+      newFile = await databases.createDocument(
+        appwriteConfig.databaseId,
+        appwriteConfig.filesCollectionId,
+        ID.unique(),
+        fileDocument
+      );
+    } catch (error) {
+      // Delete file from storage if document creation fails
+      await storage.deleteFile(appwriteConfig.bucketId, bucketFile.$id);
+      handleError(error, "Failed to create file document");
+    }
+
+    // Revalidate path
+    revalidatePath(path);
+
+    const parsedFile = parseStringify(newFile);
+    // Update user's avatar in database
+     await databases.updateDocument(
+      appwriteConfig.databaseId,
+      appwriteConfig.usersCollectionId,
+      ownerId,
+      {
+        avatar: parsedFile.url,
+      }
+    );
+
+    
+    
+
+    // Return the new file document
+    return parsedFile;
+
+  } catch (error) {
+    handleError(error, "Failed to upload file");
+  }
+};
+
+
 export const createAccount = async ({
   fullName,
   email,
@@ -94,6 +166,8 @@ export const createAccount = async ({
 
   return parseStringify({ accountId });
 };
+
+
 
 export const verifySecret = async ({
   accountId,

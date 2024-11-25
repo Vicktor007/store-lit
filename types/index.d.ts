@@ -19,6 +19,14 @@ declare interface UploadFileProps {
   accountId: string;
   path: string;
 }
+
+declare interface UpdateUserProps {
+  file: File;
+  ownerId: string;
+  accountId: string;
+  path: string;
+  avatar?: string
+}
 declare interface GetFilesProps {
   types: FileType[];
   searchText?: string;
@@ -35,6 +43,11 @@ declare interface UpdateFileUsersProps {
   fileId: string;
   emails: string[];
   path: string;
+}
+
+declare interface UpdateUsersProps {
+  userId: string;
+  avatar: string;
 }
 declare interface DeleteFileProps {
   fileId: string;

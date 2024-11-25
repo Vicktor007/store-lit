@@ -192,7 +192,7 @@ const MobileNavigation = ({
         </SheetTrigger>
         <SheetContent className="shad-sheet z-[99999] h-screen px-3">
           <SheetTitle>
-            <div className="header-user">
+            <Link href="/type/profile" className="header-user" onClick={handleNavItemClick}>
               <Image
                 src={avatar}
                 alt="avatar"
@@ -204,7 +204,7 @@ const MobileNavigation = ({
                 <p className="subtitle-2 capitalize">{fullName}</p>
                 <p className="caption">{email}</p>
               </div>
-            </div>
+            </Link>
             <Separator className="mb-4 bg-light-200/20" />
           </SheetTitle>
 
