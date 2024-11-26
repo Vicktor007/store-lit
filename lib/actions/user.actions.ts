@@ -57,7 +57,7 @@ export const sendEmailOTP = async ({ email }: { email: string }) => {
 
     return session.userId;
   } catch (error) {
-    handleError(error, "Failed to send email OTP");
+    handleError(error, "Failed to send email OTP, please try again!");
   }
 };
 
@@ -211,7 +211,7 @@ export const verifySecret = async ({
 
     return parseStringify({ sessionId: session.$id });
   } catch (error) {
-    handleError(error, "Failed to verify OTP");
+    handleError(error, "Failed to verify OTP, please request for another otp and try again");
   }
 };
 
