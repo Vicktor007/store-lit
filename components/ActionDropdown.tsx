@@ -20,7 +20,7 @@ import Image from "next/image";
 import { Models } from "node-appwrite";
 import { actionsDropdownItems } from "@/constants";
 import Link from "next/link";
-import { constructDownloadUrl } from "@/lib/utils";
+import { cn, constructDownloadUrl } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
@@ -30,7 +30,7 @@ import {
 } from "@/lib/actions/file.actions";
 import { usePathname } from "next/navigation";
 import { FileDetails, ShareInput } from "@/components/ActionsModalContent";
-import { getCurrentUser } from "@/lib/actions/user.actions";
+import { getCurrentUser, updateAvatar } from "@/lib/actions/user.actions";
 
 interface User {
   email: string;
@@ -64,7 +64,25 @@ const ActionDropdown = ({ file }: { file: Models.Document }) => {
     setIsDropdownOpen(false);
     setAction(null);
     setName(file.name);
-    //   setEmails([]);
+  };
+
+  const actions = {
+    rename: () =>
+      renameFile({ fileId: file.$id, name, extension: file.extension, path }),
+    share: () => updateFileUsers({ fileId: file.$id, emails, path }),
+    delete: () => {
+      if (file.owner) {
+        return deleteFile({
+          fileId: file.$id,
+          bucketFileId: file.bucketFileId,
+          path,
+        });
+      } else {
+        setIsLoading(false);
+        return false;
+      }
+    },
+    useAsAvatar: () => updateAvatar({ ownerId: file.owner.$id, avatarPlaceholder: file.url }),
   };
 
   const handleAction = async () => {
@@ -72,25 +90,12 @@ const ActionDropdown = ({ file }: { file: Models.Document }) => {
     setIsLoading(true);
     let success = false;
 
-    const actions = {
-      rename: () =>
-        renameFile({ fileId: file.$id, name, extension: file.extension, path }),
-      share: () => updateFileUsers({ fileId: file.$id, emails, path }),
-      delete: () => {
-        if (file.owner) {
-          return deleteFile({
-            fileId: file.$id,
-            bucketFileId: file.bucketFileId,
-            path,
-          });
-        } else {
-          setIsLoading(false);
-          return false;
-        }
-      },
-    };
-
-    success = await actions[action.value as keyof typeof actions]();
+    const actionFunction = actions[action.value as keyof typeof actions];
+    if (typeof actionFunction === 'function') {
+      success = await actionFunction();
+    } else {
+      console.error(`Action "${action.value}" is not a function`);
+    }
 
     if (success) closeAllModals();
 
@@ -142,8 +147,22 @@ const ActionDropdown = ({ file }: { file: Models.Document }) => {
               <span className="delete-file-name">{file.name}</span>?
             </p>
           )}
+          {value === "useAsAvatar" && (
+            <>
+              <Image
+                src={file.url}
+                alt="thumbnail"
+                width={100}
+                height={100}
+                className={cn(
+                  "size-8 object-contain rounded-full",
+                  "thumbnail-image"
+                )}
+              />
+            </>
+          )}
         </DialogHeader>
-        {["rename", "delete", "share"].includes(value) && (
+        {["rename", "delete", "share", "useAsAvatar"].includes(value) && (
           <DialogFooter className="flex flex-col gap-3 md:flex-row">
             <Button onClick={closeAllModals} className="modal-cancel-button">
               Cancel
@@ -209,47 +228,49 @@ const ActionDropdown = ({ file }: { file: Models.Document }) => {
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
           {actionsDropdownItems.map((actionItem) => (
-            <DropdownMenuItem
-              key={actionItem.value}
-              className="shad-dropdown-item"
-              onClick={() => {
-                setAction(actionItem);
+            (actionItem.value !== "useAsAvatar" || file.type === "image") && (
+              <DropdownMenuItem
+                key={actionItem.value}
+                className="shad-dropdown-item"
+                onClick={() => {
+                  setAction(actionItem);
 
-                if (
-                  ["rename", "share", "delete", "details"].includes(
-                    actionItem.value,
-                  )
-                ) {
-                  setIsModalOpen(true);
-                }
-              }}
-            >
-              {actionItem.value === "download" ? (
-                <Link
-                  href={constructDownloadUrl(file.bucketFileId)}
-                  download={file.name}
-                  className="flex items-center gap-2"
-                >
-                  <Image
-                    src={actionItem.icon}
-                    alt={actionItem.label}
-                    width={30}
-                    height={30}
-                  />
-                  {actionItem.label}
-                </Link>
-              ) : (
-                <div className="flex items-center gap-2">
-                  <Image
-                    src={actionItem.icon}
-                    alt={actionItem.label}
-                    width={30}
-                    height={30}
-                  />
-                  {actionItem.label}
-                </div>
-              )}
-            </DropdownMenuItem>
+                  if (
+                    ["rename", "share", "delete", "details", "useAsAvatar"].includes(
+                      actionItem.value,
+                    )
+                  ) {
+                    setIsModalOpen(true);
+                  }
+                }}
+              >
+                {actionItem.value === "download" ? (
+                  <Link
+                    href={constructDownloadUrl(file.bucketFileId)}
+                    download={file.name}
+                    className="flex items-center gap-2"
+                  >
+                    <Image
+                      src={actionItem.icon}
+                      alt={actionItem.label}
+                      width={30}
+                      height={30}
+                    />
+                    {actionItem.label}
+                  </Link>
+                ) : (
+                  <div className="flex items-center gap-2">
+                    <Image
+                      src={actionItem.icon}
+                      alt={actionItem.label}
+                      width={30}
+                      height={30}
+                    />
+                    {actionItem.label}
+                  </div>
+                )}
+              </DropdownMenuItem>
+            )
           ))}
         </DropdownMenuContent>
       </DropdownMenu>
@@ -258,4 +279,5 @@ const ActionDropdown = ({ file }: { file: Models.Document }) => {
     </Dialog>
   );
 };
+
 export default ActionDropdown;

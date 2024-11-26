@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { getCurrentUser } from "@/lib/actions/user.actions";
 
-const ImageThumbnail = ({ file }: { file: Models.Document }) => (
+export const ImageThumbnail = ({ file }: { file: Models.Document }) => (
   <div className="file-details-thumbnail">
     <Thumbnail type={file.type} extension={file.extension} url={file.url} />
     <div className="flex flex-col">
@@ -35,6 +35,8 @@ export const FileDetails = ({ file }: { file: Models.Document }) => {
         <DetailRow label="Format:" value={file.extension} />
         <DetailRow label="Size:" value={convertFileSize(file.size)} />
         <DetailRow label="Owner:" value={file.owner.fullName} />
+        {file.users.length < 0 && <DetailRow label="Shared with:" value={file.users} />}
+        <DetailRow label="number of shared users:" value={file.users.length} />
         <DetailRow label="Last edit:" value={formatDateTime(file.$updatedAt)} />
       </div>
     </>

@@ -14,7 +14,7 @@ import React, { useState } from "react";
 import Image from "next/image";
 import { updateAvatar } from "@/lib/actions/user.actions";
 import { useToast } from "@/hooks/use-toast";
-import { avatarPlaceholderUrl } from "@/constants";
+import { avatarPlaceholderUrl, femaleAvatarUrl } from "@/constants";
 import AvatarUploader from "./AvatarUploader";
 
 const AvatarModal = ({
@@ -36,7 +36,7 @@ const AvatarModal = ({
 
   const placeholder = avatarPlaceholderUrl;
 
-  const femaleAvatar = "https://img.freepik.com/free-photo/cartoon-character-with-fashion-bag_71767-98.jpg?t=st=1732574039~exp=1732577639~hmac=bcdbcad764465111b4dba98610cc8e6adb94ccb5ea3cb196bcac00b248799b1d&w=740"
+  const femaleAvatar = femaleAvatarUrl;
 
 
 
@@ -93,7 +93,7 @@ const AvatarModal = ({
           </AlertDialogDescription>
         </AlertDialogHeader>
 
-        <div className="header-user">
+        <div className="header-avatar">
           <Image
             src={femaleAvatar}
             alt="avatar-female"
@@ -113,8 +113,8 @@ const AvatarModal = ({
         </div>
         
         <AlertDialogFooter>
-          <div className="flex w-full flex-col gap-4">
-          <AvatarUploader onClose={onClose} ownerId={ownerId} accountId={accountId} />
+          <div className="flex w-full flex-col items-center justify-center gap-4">
+          
             <AlertDialogAction
               onClick={handleSubmit}
               className="shad-submit-btn h-12"
@@ -132,6 +132,8 @@ const AvatarModal = ({
                 />
               )}
             </AlertDialogAction>
+                    <span className="align-middle">or</span>
+            <AvatarUploader onClose={onClose} ownerId={ownerId} accountId={accountId} />
           </div>
         </AlertDialogFooter>
       </AlertDialogContent>

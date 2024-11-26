@@ -408,9 +408,17 @@
   .header-user {
     @apply my-3 flex items-center gap-2 rounded-full p-1 text-light-100 sm:justify-center sm:bg-brand/10 lg:justify-start lg:p-3 !important;
   }
-  .header-user-avatar {
-    @apply aspect-square w-10 rounded-full object-cover !important;
+  .header-avatar {
+    @apply my-3 flex items-center gap-2 rounded-full p-1 text-light-100 justify-center sm:bg-brand/10  lg:p-3 !important;
   }
+  .header-user-avatar {
+    @apply aspect-square w-10 rounded-full object-cover cursor-pointer !important;
+    @apply hover:ring-4 hover:bg-rose-600 hover:ring-opacity-50;
+    @apply hover:shadow-lg;
+    transition: all 0.2s ease-in-out; 
+  }
+  
+  
   .mobile-nav {
     @apply h5 flex-1 gap-1 text-brand !important;
   }

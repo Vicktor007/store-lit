@@ -52,7 +52,13 @@ export const actionsDropdownItems = [
     icon: "/assets/icons/delete.svg",
     value: "delete",
   },
+  {
+    label: "Use as Avatar",
+    icon: "/assets/icons/file-image.svg",
+    value: "useAsAvatar",
+  }
 ];
+
 
 export const sortTypes = [
   {
@@ -83,5 +89,7 @@ export const sortTypes = [
 
 export const avatarPlaceholderUrl =
   "https://img.freepik.com/free-psd/3d-illustration-person-with-sunglasses_23-2149436188.jpg";
+
+  export const femaleAvatarUrl = "https://img.freepik.com/free-photo/cartoon-character-with-fashion-bag_71767-98.jpg?t=st=1732574039~exp=1732577639~hmac=bcdbcad764465111b4dba98610cc8e6adb94ccb5ea3cb196bcac00b248799b1d&w=740"
 
 export const MAX_FILE_SIZE = 50 * 1024 * 1024; // 50MB
