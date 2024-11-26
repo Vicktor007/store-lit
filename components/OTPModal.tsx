@@ -48,6 +48,17 @@ const {toast} = useToast();
       const sessionId = await verifySecret({ accountId, password });
 
       if (sessionId) router.push("/");
+      return toast({
+        description: (
+          
+          <p className="body-2 text-white">
+           You are logged in!
+          </p>
+        ),
+        className: "error-toast",
+      });
+      
+
     } catch (error) {
       console.log("Failed to verify OTP", error);
       setErrorMessage(String(error));
@@ -61,9 +72,11 @@ const {toast} = useToast();
         className: "error-toast",
       });
       
+    }finally{
+      setIsLoading(false);
     }
 
-    setIsLoading(false);
+    
   };
 
   const handleResendOtp = async () => {
