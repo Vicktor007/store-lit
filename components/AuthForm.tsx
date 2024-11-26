@@ -19,6 +19,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { createAccount, signInUser } from "@/lib/actions/user.actions";
 import OtpModal from "@/components/OTPModal";
+import { useToast } from "@/hooks/use-toast";
 
 type FormType = "sign-in" | "sign-up";
 
@@ -46,6 +47,8 @@ const AuthForm = ({ type }: { type: FormType }) => {
     },
   });
 
+  const {toast} = useToast();
+
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     setIsLoading(true);
     setErrorMessage("");
@@ -62,6 +65,14 @@ const AuthForm = ({ type }: { type: FormType }) => {
       setAccountId(user.accountId);
     } catch (error) {
       setErrorMessage(String(error));
+      return toast({
+        description: (
+          <p className="body-2 text-white">
+           {errorMessage}
+          </p>
+        ),
+        className: "error-toast",
+      });
     } finally {
       setIsLoading(false);
     }
