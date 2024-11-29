@@ -47,16 +47,19 @@ const {toast} = useToast();
     try {
       const sessionId = await verifySecret({ accountId, password });
 
-      if (sessionId) router.push("/");
-      return toast({
-        description: (
-          
-          <p className="body-2 text-white">
-           You are logged in!
-          </p>
-        ),
-        className: "error-toast",
-      });
+      console.log(sessionId );
+      
+      router.push("/");
+        return toast({
+          description: (
+            
+            <p className="body-2 text-white">
+             You are logged in!
+            </p>
+          ),
+          className: "error-toast",
+        });
+    
       
 
     } catch (error) {
