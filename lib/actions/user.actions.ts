@@ -201,7 +201,7 @@ export const verifySecret = async ({
     const { account } = await createAdminClient();
 
     const session = await account.createSession(accountId, password);
-    console.log(session);
+    
     
     (await cookies()).set("appwrite-session", session.secret, {
       path: "/",
@@ -221,7 +221,7 @@ export const getCurrentUser = async () => {
     const { databases, account } = await createSessionClient();
 
     const result = await account.get();
-
+    
     const user = await databases.listDocuments(
       appwriteConfig.databaseId,
       appwriteConfig.usersCollectionId,

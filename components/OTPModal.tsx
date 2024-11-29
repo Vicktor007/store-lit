@@ -45,9 +45,7 @@ const {toast} = useToast();
   
 
     try {
-      const sessionId = await verifySecret({ accountId, password });
-
-      console.log(sessionId );
+       await verifySecret({ accountId, password });
       
       router.push("/");
         return toast({
