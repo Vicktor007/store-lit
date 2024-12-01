@@ -144,6 +144,7 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import FileUploader from "@/components/FileUploader";
 import { signOutUser } from "@/lib/actions/user.actions";
+import { useToast } from "@/hooks/use-toast";
 
 
 interface Props {
@@ -162,11 +163,42 @@ const MobileNavigation = ({
   email,
 }: Props) => {
   const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
   const pathname = usePathname();
-
+  const {toast} = useToast();
   const handleNavItemClick = () => {
     setOpen(false);
   };
+
+
+  const handleSignOut = async (e:React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    setLoading(true);
+    try {
+      await signOutUser();
+      localStorage.removeItem("currentUser");
+        return toast({
+        description: (
+          <p className="body-2 text-white">
+           You have been signed out
+          </p>
+        ),
+        className: "error-toast",
+      });
+    } catch (error) {
+      console.log("Failed to sign out", error);
+      return toast({
+        description: (
+          <p className="body-2 text-white">
+           Failed to sign out
+          </p>
+        ),
+        className: "error-toast",
+      });
+    } finally {
+      setLoading(false);
+    }
+  }
 
   return (
     <header className="mobile-header sticky">
@@ -242,10 +274,9 @@ const MobileNavigation = ({
             <Button
               type="submit"
               className="mobile-sign-out-button"
-              onClick={async () => {
-                await signOutUser();
-              }}
-            >
+              onClick={handleSignOut}
+            >{!loading ? (
+              <>
               <Image
                 src="/assets/icons/logout.svg"
                 alt="logo"
@@ -253,6 +284,14 @@ const MobileNavigation = ({
                 height={24}
               />
               <p>Logout</p>
+              </>) : (<Image
+                src="/assets/icons/loader.svg"
+                alt="loader"
+                width={24}
+                height={24}
+                className="ml-2 animate-spin"
+              />)}
+              
             </Button>
           </div>
         </SheetContent>
