@@ -264,3 +264,27 @@ export const signInUser = async ({ email }: { email: string }) => {
     handleError(error, "Failed to sign in user");
   }
 };
+
+// New function to delete user account and files 
+export const deleteUserAccount = async (userId: string) => { 
+  const { databases, storage } = await createAdminClient();
+   try { // Fetch user files 
+    const files = await databases.listDocuments(
+       appwriteConfig.databaseId, 
+       appwriteConfig.filesCollectionId,
+        [Query.equal("owner", userId)] ); 
+        // Delete user files from storage and database
+         for (const file of files.documents) { 
+          await storage.deleteFile(appwriteConfig.bucketId, file.bucketFileId);
+           await databases.deleteDocument( appwriteConfig.databaseId,
+             appwriteConfig.filesCollectionId, file.$id ); }
+              // Delete user document from database
+               await databases.deleteDocument( appwriteConfig.databaseId,
+                 appwriteConfig.usersCollectionId, userId );
+
+                   console.log(`User ${userId} and their files have been deleted.`); }
+                    catch
+                    (error) { handleError(error, "Failed to delete user account and files"); }
+                   };
+
+
