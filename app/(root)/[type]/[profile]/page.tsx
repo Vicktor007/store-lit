@@ -31,10 +31,11 @@ const Page = () => {
         <Image
           src={currentUser.avatar}
           alt="Avatar"
-          width={44}
-          height={44}
+          width={100}
+          height={100}
           className="profile-user-avatar"
         />
+        
         <div className="mx-2">
           <p className="subtitle-2 capitalize">{currentUser.fullName}</p>
           <p className="caption">{currentUser.email}</p>

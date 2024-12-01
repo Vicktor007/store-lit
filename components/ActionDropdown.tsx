@@ -164,9 +164,7 @@ const ActionDropdown = ({ file }: { file: Models.Document }) => {
         </DialogHeader>
         {["rename", "delete", "share", "useAsAvatar"].includes(value) && (
           <DialogFooter className="flex flex-col gap-3 md:flex-row">
-            <Button onClick={closeAllModals} className="modal-cancel-button">
-              Cancel
-            </Button>
+            
             {value === "delete" ? (
               file.owner.email === currentUser?.email ? (
                 <Button onClick={handleAction} className="modal-submit-button">
@@ -205,6 +203,9 @@ const ActionDropdown = ({ file }: { file: Models.Document }) => {
                 )}
               </Button>
             )}
+            <Button onClick={closeAllModals} className="modal-cancel-button">
+              Cancel
+            </Button>
           </DialogFooter>
         )}
       </DialogContent>
