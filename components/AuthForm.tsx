@@ -71,7 +71,7 @@ const AuthForm = ({ type }: { type: FormType }) => {
            {errorMessage}
           </p>
         ),
-        className: "error-toast",
+        className: "error-toast top-middle-toast",
       });
     } finally {
       setIsLoading(false);

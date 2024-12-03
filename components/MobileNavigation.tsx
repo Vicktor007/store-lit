@@ -183,7 +183,7 @@ const MobileNavigation = ({
            You have been signed out
           </p>
         ),
-        className: "error-toast",
+        className: "error-toast top-middle-toast",
       });
     } catch (error) {
       console.log("Failed to sign out", error);
@@ -193,7 +193,7 @@ const MobileNavigation = ({
            Failed to sign out
           </p>
         ),
-        className: "error-toast",
+        className: "error-toast top-middle-toast",
       });
     } finally {
       setLoading(false);

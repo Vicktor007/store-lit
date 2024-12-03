@@ -494,6 +494,16 @@
     @apply !shadow-drop-3 !important;
   }
 
+  .top-middle-toast {
+    position: fixed;
+    top: 20px; /* Adjust this value as needed */
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 9999; /* Ensure it appears above other elements */
+    width: fit-content;
+  }
+  
+
   /* Thumbnail */
   .thumbnail {
     @apply flex-center size-[50px] min-w-[50px] overflow-hidden rounded-full bg-brand/10;

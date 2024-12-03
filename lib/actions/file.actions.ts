@@ -90,7 +90,9 @@ const createQueries = (
     Query.or([
       Query.equal("owner", [currentUser.$id]),
       Query.contains("users", [currentUser.email]),
+      
     ]),
+    Query.equal("avatar", [false]),
   ];
 
   if (types.length > 0) queries.push(Query.equal("type", types));

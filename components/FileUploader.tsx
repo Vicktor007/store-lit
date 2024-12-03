@@ -42,7 +42,7 @@ const FileUploader = ({ ownerId, accountId, className }: Props) => {
                 Max file size is 50MB.
               </p>
             ),
-            className: "error-toast",
+            className: "error-toast top-middle-toast",
           });
         }
 

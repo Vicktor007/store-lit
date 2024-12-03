@@ -43,7 +43,7 @@ const AvatarUploader = ({ ownerId, accountId, className, onClose }: Props) => {
                 Max file size is 50MB.
               </p>
             ),
-            className: "error-toast",
+            className: "error-toast top-middle-toast",
           });
         }
 

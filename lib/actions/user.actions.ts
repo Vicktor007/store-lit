@@ -114,6 +114,7 @@ export const updateUser = async ({
       accountId,
       users: [],
       bucketFileId: bucketFile.$id,
+      avatar: true
     };
 
     // Create file document in database
