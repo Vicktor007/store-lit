@@ -25,7 +25,9 @@ declare interface UpdateUserProps {
   ownerId: string;
   accountId: string;
   path: string;
-  avatar?: string
+  avatar?: string;
+  avatarId?: string;
+  avatarFileId?: string;
 }
 declare interface GetFilesProps {
   types: FileType[];

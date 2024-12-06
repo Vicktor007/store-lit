@@ -21,12 +21,16 @@ const AvatarModal = ({
   ownerId,
   accountId,
   isOpen,
+  avatarId,
+  avatarFileId,
   onClose,
  
 }: {
   ownerId: string;
   accountId: string;
   isOpen: boolean;
+  avatarId?: string;
+  avatarFileId?: string;
   onClose: () => void;
   
 }) => {
@@ -45,7 +49,7 @@ const AvatarModal = ({
     setIsLoading(true);
 
     try {
-      const avatar = await updateAvatar({ ownerId, avatarPlaceholder });
+      const avatar = await updateAvatar({ ownerId, avatarPlaceholder, avatarId, fileId:avatarFileId });
         
       if (avatar) {
         toast({
@@ -133,7 +137,7 @@ const AvatarModal = ({
               )}
             </AlertDialogAction>
                     <span className="align-middle">or</span>
-            <AvatarUploader onClose={onClose} ownerId={ownerId} accountId={accountId} />
+            <AvatarUploader onClose={onClose} avatarFileId={avatarFileId} avatarId={avatarId} ownerId={ownerId} accountId={accountId} />
           </div>
         </AlertDialogFooter>
       </AlertDialogContent>

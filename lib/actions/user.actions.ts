@@ -62,37 +62,82 @@ export const sendEmailOTP = async ({ email }: { email: string }) => {
 };
 
 
-export const updateAvatar = async ({ownerId, avatarPlaceholder}
-  :
-  {ownerId: string; avatarPlaceholder: string}) => {
-    const { databases } = await createAdminClient();
+export const updateAvatar = async ({
+  ownerId,
+  avatarPlaceholder,
+  avatarId,
+  fileId
+}: {
+  ownerId: string;
+  avatarPlaceholder: string;
+  avatarId?: string;
+  fileId?: string;
+}) => {
+  const { storage, databases } = await createAdminClient();
 
-    try {
-      
-    const updatedAvatar=   await databases.updateDocument(
-        appwriteConfig.databaseId,
-        appwriteConfig.usersCollectionId,
-        ownerId,
-        {
-          avatar: avatarPlaceholder,
+  try {
+    if (avatarId && fileId) {
+      try {
+        const deletedFile = await databases.deleteDocument(
+          appwriteConfig.databaseId,
+          appwriteConfig.filesCollectionId,
+          fileId,
+        );
+          if (deletedFile) await storage.deleteFile(appwriteConfig.bucketId, avatarId);
+      } catch (deleteError) {
+        const error = deleteError as { code: number }; // Type assertion
+        if (error.code !== 404) {
+          throw deleteError;
         }
-      );
-      return parseStringify(updatedAvatar)
-    } catch (error) {
-      handleError(error, "failed to update avatar")
+        // If the file is not found (404), continue without throwing an error
+      }
     }
+
+    const updatedAvatar = await databases.updateDocument(
+      appwriteConfig.databaseId,
+      appwriteConfig.usersCollectionId,
+      ownerId,
+      {
+        avatar: avatarPlaceholder,
+      }
+    );
+
+    return parseStringify(updatedAvatar);
+  } catch (error) {
+    handleError(error, "failed to update avatar");
   }
+};
+
+
 
 
 export const updateUser = async ({
   file,
   ownerId,
   accountId,
+  avatarId,
+  avatarFileId,
   path
 }: UpdateUserProps) => {
   const { storage, databases } = await createAdminClient();
 
   try {
+    if (avatarId && avatarFileId) {
+      try {
+        const deletedFile = await databases.deleteDocument(
+          appwriteConfig.databaseId,
+          appwriteConfig.filesCollectionId,
+          avatarFileId,
+        );
+        if (deletedFile) await storage.deleteFile(appwriteConfig.bucketId, avatarId);
+      } catch (deleteError) {
+        const error = deleteError as { code: number }; // Type assertion
+        if (error.code !== 404) {
+          throw deleteError;
+        }
+        // If the file is not found (404), continue without throwing an error
+      }
+    }
     // Convert file to InputFile
     const inputFile = InputFile.fromBuffer(file, file.name);
 
@@ -143,11 +188,12 @@ export const updateUser = async ({
       ownerId,
       {
         avatar: parsedFile.url,
+        avatarId: parsedFile.bucketFileId,
+        avatarFileId: parsedFile.$id
       }
     );
 
-    
-    
+      
 
     // Return the new file document
     return parsedFile;

@@ -9,7 +9,7 @@ import { cn } from '@/lib/utils';
 import Image from 'next/image';
 import React, { useState, useEffect } from 'react';
 
-type User = { $id: string; avatar: string; fullName: string; email: string; accountId: string; };
+type User = { $id: string; avatar: string; fullName: string; email: string; accountId: string; avatarId?: string; avatarFileId?: string; };
 
 const Page = () => {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
@@ -18,9 +18,6 @@ const Page = () => {
  
   const fetchUser = async () => { const user = await getCurrentUser(); setCurrentUser(user); }; 
 
-  
- 
-  
 
 
   useEffect(() => { fetchUser(); }, []); 
@@ -58,7 +55,7 @@ const Page = () => {
         </Button>
       </div>
       {deleteModal && <DeleteModal onClose={closeDeleteModal} userId={currentUser.$id} isOpen={deleteModal} />}
-      {open && <AvatarModal isOpen={open} accountId={currentUser.accountId} onClose={handleClose} ownerId={currentUser.$id} />}
+      {open && <AvatarModal isOpen={open} accountId={currentUser.accountId} avatarId={currentUser.avatarId} avatarFileId={currentUser.avatarFileId} onClose={handleClose} ownerId={currentUser.$id} />}
     </div>
   );
 };

@@ -14,11 +14,14 @@ import { updateUser } from "@/lib/actions/user.actions";
 interface Props {
   ownerId: string;
   accountId: string;
+  avatarId?: string;
+  avatarFileId?: string;
   className?: string;
   onClose: () => void;
 }
 
-const AvatarUploader = ({ ownerId, accountId, className, onClose }: Props) => {
+const AvatarUploader = ({ ownerId, accountId, avatarId, className, avatarFileId,  onClose }: Props) => {
+  
   const path = usePathname();
   const { toast } = useToast();
   const [files, setFiles] = useState<File[]>([]);
@@ -47,7 +50,8 @@ const AvatarUploader = ({ ownerId, accountId, className, onClose }: Props) => {
           });
         }
 
-        return updateUser({ file, ownerId, accountId, path }).then(
+        return updateUser({ file, ownerId, accountId, avatarId, avatarFileId, path }).then(
+          
           (uploadedFile) => {
             if (uploadedFile) {
               setUploadStatus((prevStatus) => ({
@@ -70,7 +74,7 @@ const AvatarUploader = ({ ownerId, accountId, className, onClose }: Props) => {
 
       await Promise.all(uploadPromises);
     },
-    [ownerId, accountId, path, toast,onClose],
+    [ownerId, accountId, avatarId, avatarFileId, path, toast, onClose],
   );
 
   const { getRootProps, getInputProps } = useDropzone({ onDrop });
