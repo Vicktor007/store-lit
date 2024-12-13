@@ -32,7 +32,7 @@ const Page = async ({ searchParams, params }: SearchParamProps) => {
     <div className="page-container">
       
       <section className="w-full">
-        <h1 className="h1 capitalize">{type}</h1>
+        <h1 className="h1 capitalize">{type === "shared" ? "Files Shared with you" : (type)}</h1>
 
         <div className="total-size-section">
           <p className="body-1">

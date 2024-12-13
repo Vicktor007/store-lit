@@ -37,6 +37,8 @@ export const FileDetails = ({ file }: { file: Models.Document }) => {
         <DetailRow label="Owner:" value={file.owner.fullName} />
         {file.users.length < 0 && <DetailRow label="Shared with:" value={file.users} />}
         <DetailRow label="number of shared users:" value={file.users.length} />
+        <DetailRow label="shared users:" value={file.users}>
+          </DetailRow>
         <DetailRow label="Last edit:" value={formatDateTime(file.$updatedAt)} />
       </div>
     </>
@@ -85,7 +87,7 @@ export const ShareInput = ({ file, onInputChange, onRemove }: Props) => {
           <div className="flex justify-between">
             <p className="subtitle-2 text-light-100">Shared with</p>
             <p className="subtitle-2 text-light-200">
-              {file.users.length} users
+              {file.users.length} {file.users.length === 1 ? "user" : "users"}
             </p>
           </div>
 
@@ -95,7 +97,7 @@ export const ShareInput = ({ file, onInputChange, onRemove }: Props) => {
                 key={email}
                 className="flex items-center justify-between gap-2"
               >
-                <p className="subtitle-2">{email}</p>
+                <p className="subtitle-2">{email === currentUser?.email ? "You" : email}</p>
                 {currentUser && file.owner.email === currentUser.email && (
                   <Button
                     onClick={() => onRemove(email)}
