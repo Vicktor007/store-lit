@@ -1,6 +1,6 @@
 import React from "react";
 import Sort from "@/components/Sort";
-import { getFiles } from "@/lib/actions/file.actions";
+import { getFiles, getSharedFiles } from "@/lib/actions/file.actions";
 import { Models } from "node-appwrite";
 import Card from "@/components/Card";
 import { getFileTypesParams, convertFileSize } from "@/lib/utils";
@@ -21,7 +21,10 @@ const Page = async ({ searchParams, params }: SearchParamProps) => {
 
   const currentUser = await getCurrentUser();
 
-  const files = await getFiles({ types, searchText, sort });
+  const files = type === "shared" 
+  ? await getSharedFiles({ searchText, sort }) 
+  : await getFiles({ types, searchText, sort });
+
 
   const totalSize = calculateTotalSize(files.documents);
 
@@ -45,7 +48,7 @@ const Page = async ({ searchParams, params }: SearchParamProps) => {
       </section>
 
       {/* Render the files */}
-      {files.total > 0 ? (
+      {files.total > 0  ? (
         <section className="file-list">
           {files.documents.map((file: Models.Document) => (
             <Card key={file.$id} file={file} />
@@ -53,11 +56,19 @@ const Page = async ({ searchParams, params }: SearchParamProps) => {
         </section>
       ) : (
         <>
-        <p className="empty-list">No files uploaded</p>
+        {
+          type === "shared" ? (
+            <p className="empty-list">No files shared with you</p>
+          ) : (
+            <>
+            <p className="empty-list">No files uploaded</p>
         <PlusUploader ownerId={currentUser.$id} accountId={currentUser.accountId} />
         </>
+          )
+        }
+        </>
       )}
-      {files.total > 0 && <div className="floating-file-uploader"><PlusUploader ownerId={currentUser.$id} accountId={currentUser.accountId} /></div>}
+      {files.total > 0 && type !== "shared" && <div className="floating-file-uploader"><PlusUploader ownerId={currentUser.$id} accountId={currentUser.accountId} /></div>}
     </div>
   );
 };

@@ -110,6 +110,63 @@ const createQueries = (
   return queries;
 };
 
+
+const createSharedQueries = (
+  currentUser: Models.Document,
+  searchText: string,
+  sort: string,
+  limit?: number,
+) => {
+  const sharedQueries = [
+   
+
+      Query.contains("users", [currentUser.email]),
+    
+    Query.equal("avatar", [false]),
+  ];
+
+  if (searchText) sharedQueries.push(Query.contains("name", searchText));
+  if (limit) sharedQueries.push(Query.limit(limit));
+
+  if (sort) {
+    const [sortBy, orderBy] = sort.split("-");
+
+    sharedQueries.push(
+      orderBy === "asc" ? Query.orderAsc(sortBy) : Query.orderDesc(sortBy),
+    );
+  }
+
+  return sharedQueries;
+};
+
+
+export const getSharedFiles = async ({
+  searchText = "",
+  sort = "$createdAt-desc",
+  limit,
+}: GetFilesProps) => {
+  const { databases } = await createAdminClient();
+
+  try {
+    const currentUser = await getCurrentUser();
+
+    if (!currentUser) throw new Error("User not found");
+
+    const sharedQueries = createSharedQueries(currentUser, searchText, sort, limit);
+
+    const files = await databases.listDocuments(
+      appwriteConfig.databaseId,
+      appwriteConfig.filesCollectionId,
+      sharedQueries,
+    );
+
+    
+    return parseStringify(files);
+  } catch (error) {
+    handleError(error, "Failed to get files");
+  }
+};
+
 export const getFiles = async ({
   types = [],
   searchText = "",

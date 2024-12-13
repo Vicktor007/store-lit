@@ -36,7 +36,7 @@ const Sidebar = ({ fullName, avatar, email }: Props) => {
       </Link>
 
       <nav className="sidebar-nav">
-        <ul className="flex flex-1 flex-col gap-6">
+        <ul className="flex flex-1 flex-col gap-4">
           {navItems.map(({ url, name, icon }) => (
             <Link key={name} href={url} className="lg:w-full">
               <li
@@ -67,7 +67,7 @@ const Sidebar = ({ fullName, avatar, email }: Props) => {
         alt="logo"
         width={506}
         height={418}
-        className="w-full"
+        className="w-full mt-2"
       />
 
       <Link href="/type/profile" className="sidebar-user-info">

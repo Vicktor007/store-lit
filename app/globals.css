@@ -459,10 +459,10 @@
     @apply remove-scrollbar hidden h-screen w-[90px] flex-col overflow-auto px-5 py-7 sm:flex lg:w-[280px] xl:w-[325px] !important;
   }
   .sidebar-nav {
-    @apply h5 mt-9 flex-1 gap-1 text-brand !important;
+    @apply h5 mt-6 flex-1 gap-1 text-brand !important;
   }
   .sidebar-nav-item {
-    @apply flex text-light-100 hover:bg-rose-300 hover:text-white gap-4 rounded-xl lg:w-full justify-center lg:justify-start items-center h5 lg:px-[30px] h-[52px] lg:rounded-full !important;
+    @apply flex text-light-100 hover:bg-rose-300 hover:text-white gap-4 rounded-xl lg:w-full justify-center lg:justify-start items-center h5 lg:px-[30px] h-[50px] lg:rounded-full !important;
   }
 
   .sidebar-nav-item:hover > .nav-icon {

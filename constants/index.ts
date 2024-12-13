@@ -24,6 +24,11 @@ export const navItems = [
     icon: "/assets/icons/others.svg",
     url: "/others",
   },
+  {
+    name: "Files Shared with you",
+    icon: "/assets/icons/share-nodes-solid.svg",
+    url: "/shared",
+  }
 ];
 
 export const actionsDropdownItems = [
