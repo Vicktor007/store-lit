@@ -7,7 +7,6 @@ import { constructFileUrl, getFileType, parseStringify } from "@/lib/utils";
 import { cookies } from "next/headers";
 import { avatarPlaceholderUrl } from "@/constants";
 import { redirect } from "next/navigation";
-// import { uploadFile } from "./file.actions";
 import { revalidatePath } from "next/cache";
 import { InputFile } from "node-appwrite/file";
 
